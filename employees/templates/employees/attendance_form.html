@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 class="text-xl font-semibold mb-4">Tambah Absensi</h1>
+  <form method="post" class="bg-white p-4 rounded shadow">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div>
+      <button class="px-3 py-1 bg-green-600 text-white rounded">Simpan</button>
+      <a href="{% url 'employees:attendance-list' %}" class="ml-2">Batal</a>
+    </div>
+  </form>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Karyawan - Absensi{% endblock %}
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold text-gray-800">Daftar Karyawan</h1>
+  <a href="{% url 'employees:employee-add' %}" 
+     class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded shadow hover:bg-indigo-700 transition">
+     + Tambah Karyawan
+  </a>
+</div>
+
+<div class="overflow-x-auto bg-white shadow-md rounded-lg">
+  <table class="w-full border-collapse">
+    <thead class="bg-gray-100 text-gray-600 text-sm uppercase">
+      <tr>
+        <th class="p-3 text-left">NIK</th>
+        <th class="p-3 text-left">Nama</th>
+        <th class="p-3 text-left">Posisi</th>
+        <th class="p-3 text-left">Aksi</th>
+      </tr>
+    </thead>
+    <tbody class="text-sm divide-y divide-gray-200">
+      {% for e in employees %}
+      <tr class="hover:bg-gray-50">
+        <td class="p-3">{{ e.nik }}</td>
+        <td class="p-3">
+          <a class="text-indigo-600 hover:underline" href="{% url 'employees:employee-detail' e.pk %}">
+            {{ e.name }}
+          </a>
+        </td>
+        <td class="p-3">{{ e.position }}</td>
+        <td class="p-3 space-x-2">
+          <a href="{% url 'employees:employee-edit' e.pk %}" 
+             class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded hover:bg-yellow-200">Edit</a>
+          <a href="{% url 'employees:employee-delete' e.pk %}" 
+             class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded hover:bg-red-200">Hapus</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="p-4 text-center text-gray-500">Tidak ada karyawan.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-4">
+  {% if is_paginated %}
+    <div class="flex justify-between items-center text-sm text-gray-600">
+      <div>
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">« Prev</a>
+        {% endif %}
+      </div>
+      <div>
+        Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}
+      </div>
+      <div>
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Next »</a>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
