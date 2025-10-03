@@ -88,15 +88,15 @@ AUTH_PASSWORD_VALIDATORS = [
 JAZZMIN_SETTINGS = {
     "site_title": "HR Management",
     "site_header": "Absensi & Karyawan",
-    "welcome_sign": "Selamat datang di sistem absensi 👋",
-    "copyright": "© 2025 PT. Absensi Modern",
+    "welcome_sign": "Selamat datang di sistem absensi",
 
-    "show_ui_builder": True,  # memunculkan builder di admin
+    "show_ui_builder": True,
 
     "topmenu_links": [
         {"name": "Dashboard", "url": "admin:index", "permissions": ["auth.view_user"]},
         {"name": "Karyawan", "app": "employees"},
         {"name": "Absensi", "app": "attendances"},
+        {"name": "Auth", "app": "auth"},
     ],
 
     "icons": {
@@ -106,6 +106,8 @@ JAZZMIN_SETTINGS = {
         "auth.User": "fas fa-users",
         "auth.Group": "fas fa-user-shield",
     },
+
+    "order_with_respect_to": ["employees", "attendances", "auth"],
 }
 
 # Internationalization
