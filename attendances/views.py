@@ -1,10 +1,10 @@
-# attendances/views.py
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic, View
 from django.utils import timezone
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.utils.timezone import now
 from .models import Attendance
 from .forms import AttendanceForm
 from employees.models import Employee
@@ -27,8 +27,8 @@ class AttendanceListView(generic.ListView):
                 Q(employee__nik__icontains=q)
             )
         if date:
-            qs = qs.filter(timestamp__date=date)
-        return qs.select_related("employee")
+            qs = qs.filter(date=date)
+        return qs.select_related("employee", "shift")
 
 
 # Create view (form tambah absensi)
@@ -50,9 +50,28 @@ class QuickCheckView(View):
         emp_id = request.POST.get("employee_id")
         ct = request.POST.get("check_type", "IN")
         employee = get_object_or_404(Employee, pk=emp_id)
+
+        # Simpan absensi sederhana
         Attendance.objects.create(
             employee=employee,
-            check_type=ct,
-            timestamp=timezone.now()
+            date=timezone.now().date(),
+            check_in=timezone.now().time() if ct == "IN" else None,
+            check_out=timezone.now().time() if ct == "OUT" else None,
+            status="Hadir"
         )
         return HttpResponseRedirect(reverse("attendances:attendance-list"))
+
+
+# Laporan absensi bulanan
+def monthly_report(request):
+    month = request.GET.get("month") or now().month
+    year = request.GET.get("year") or now().year
+
+    report = Attendance.objects.filter(date__month=month, date__year=year)
+
+    context = {
+        "report": report,
+        "month": month,
+        "year": year,
+    }
+    return render(request, "attendances/monthly_report.html", context)

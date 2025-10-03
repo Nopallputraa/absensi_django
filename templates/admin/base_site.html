@@ -1,0 +1,11 @@
+{% extends "admin/base.html" %}
+{% block title %}My Modern Admin{% endblock %}
+
+{% block branding %}
+<div class="flex items-center p-4 bg-indigo-600 text-white">
+    <h1 class="text-xl font-bold">My Admin Dashboard</h1>
+    <div class="ml-auto">
+        <a href="{% url 'admin:logout' %}" class="px-3 py-1 bg-red-500 rounded">Logout</a>
+    </div>
+</div>
+{% endblock %}

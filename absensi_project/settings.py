@@ -22,6 +22,7 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
 # Application definition
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -29,7 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'employees',
-    "attendances",
+    'attendances',
     'landing',
 ]
 
@@ -83,6 +84,29 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
+
+JAZZMIN_SETTINGS = {
+    "site_title": "HR Management",
+    "site_header": "Absensi & Karyawan",
+    "welcome_sign": "Selamat datang di sistem absensi 👋",
+    "copyright": "© 2025 PT. Absensi Modern",
+
+    "show_ui_builder": True,  # memunculkan builder di admin
+
+    "topmenu_links": [
+        {"name": "Dashboard", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Karyawan", "app": "employees"},
+        {"name": "Absensi", "app": "attendances"},
+    ],
+
+    "icons": {
+        "employees.Employee": "fas fa-user-tie",
+        "attendances.Attendance": "fas fa-calendar-check",
+        "attendances.Shift": "fas fa-clock",
+        "auth.User": "fas fa-users",
+        "auth.Group": "fas fa-user-shield",
+    },
+}
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
