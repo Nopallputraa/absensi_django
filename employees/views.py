@@ -1,30 +1,33 @@
-# employees/views.py
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
+from django.contrib.auth.mixins import UserPassesTestMixin
 from .models import Employee
 from .forms import EmployeeForm
-from attendances.models import Attendance
 
-
-# Employee views
 class EmployeeListView(generic.ListView):
     model = Employee
     template_name = 'employees/employee_list.html'
     context_object_name = 'employees'
     paginate_by = 20
 
-class EmployeeCreateView(generic.CreateView):
+class AdminRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_staff
+    def handle_no_permission(self):
+        return redirect('employees:employee-list')
+
+class EmployeeCreateView(AdminRequiredMixin, generic.CreateView):
     model = Employee
     form_class = EmployeeForm
     template_name = 'employees/employee_form.html'
 
-class EmployeeUpdateView(generic.UpdateView):
+class EmployeeUpdateView(AdminRequiredMixin, generic.UpdateView):
     model = Employee
     form_class = EmployeeForm
     template_name = 'employees/employee_form.html'
 
-class EmployeeDeleteView(generic.DeleteView):
+class EmployeeDeleteView(AdminRequiredMixin, generic.DeleteView):
     model = Employee
     template_name = 'employees/employee_confirm_delete.html'
     success_url = reverse_lazy('employees:employee-list')

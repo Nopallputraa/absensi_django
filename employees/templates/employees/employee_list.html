@@ -3,10 +3,13 @@
 {% block content %}
 <div class="flex justify-between items-center mb-6">
   <h1 class="text-2xl font-bold text-gray-800">Daftar Karyawan</h1>
+
+  {% if user.is_staff %}
   <a href="{% url 'employees:employee-add' %}" 
      class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded shadow hover:bg-indigo-700 transition">
      + Tambah Karyawan
   </a>
+  {% endif %}
 </div>
 
 <div class="overflow-x-auto bg-white shadow-md rounded-lg">
@@ -16,7 +19,9 @@
         <th class="p-3 text-left">NIK</th>
         <th class="p-3 text-left">Nama</th>
         <th class="p-3 text-left">Posisi</th>
+        {% if user.is_staff %}
         <th class="p-3 text-left">Aksi</th>
+        {% endif %}
       </tr>
     </thead>
     <tbody class="text-sm divide-y divide-gray-200">
@@ -29,12 +34,15 @@
           </a>
         </td>
         <td class="p-3">{{ e.position }}</td>
+
+        {% if user.is_staff %}
         <td class="p-3 space-x-2">
           <a href="{% url 'employees:employee-edit' e.pk %}" 
              class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded hover:bg-yellow-200">Edit</a>
           <a href="{% url 'employees:employee-delete' e.pk %}" 
              class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded hover:bg-red-200">Hapus</a>
         </td>
+        {% endif %}
       </tr>
       {% empty %}
       <tr>
